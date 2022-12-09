@@ -61,6 +61,7 @@ public class Splat {
 				"\n" +
 				"Enter your name: ");
 		
+		
 		name = scan.nextLine();
 		
 		do {
@@ -73,11 +74,12 @@ public class Splat {
 					"%n" +
 					"Set the timer for your freefall.%n" +
 					"How many seconds? (floating point) ", planet.planetName, planet.Altitude, planet.terminalVelocity, planet.Acceleration );
-			
 			timer = scan.nextDouble();
 			
 			System.out.println( "Here we go." );
+			
 			System.out.printf( "%15s%15s%15s%n", "TIME s", "SPEED m/s", "HEIGHT m" );
+			
 			
 			alive = parachute( timer, score );
 			
@@ -87,13 +89,16 @@ public class Splat {
 					Score s = Scoreboard.get( i-1 );
 					if(s.equals( score[0] ))
 						System.out.printf( "You ranked %d%n%n", i );
+						
 				}
 			}
 			
 			System.out.println("Play again? (Y/N) ");
+			fx.output.setText( "Play again? (Y/N) " );
 			
 			String inp = scan.next().toLowerCase();
-			if(inp.equals("y"))
+			inp = fx.inputS.toLowerCase();
+			if(inp.contains("y"))
 				again = true;
 			else if(inp.contains( "n" ))
 				again=false;
@@ -101,6 +106,7 @@ public class Splat {
 		}while(again);
 		
 		System.out.printf( "Top Jumps:%n%15s%15s%10s%15s%15s%15s%15s%n","#","NAME","PLANET","INITIAL_HEIGHT","TIME","VELOCITY","FINAL_HEIGHT" );
+		fx.output.setText( String.format( "Top Jumps:%n%15s%15s%10s%15s%15s%15s%15s%n","#","NAME","PLANET","INITIAL_HEIGHT","TIME","VELOCITY","FINAL_HEIGHT" ) );
 		
 		for(int i = 1 ; i <= Scoreboard.size(); i++){
 			Score score = Scoreboard.get( i-1 );
@@ -153,6 +159,7 @@ public class Splat {
 		int i = 1;
 		while(height > 0 && time <= timer){
 			System.out.printf("%15f%15f%15f%n",time,speed,height);
+			fx.output.setText( fx.output.getText() + String.format( "%15f%15f%15f%n",time,speed,height ) );
 			time = (timer / 8 * i);
 			speed = time * planet.Acceleration;
 			if(speed > planet.terminalVelocity)
@@ -162,6 +169,7 @@ public class Splat {
 			
 			if(height < 0 && time <= timer){
 				System.out.printf("%15f%15f%15s%n",time,speed,"SPLAT!");
+				fx.output.setText( fx.output.getText() + String.format( "%15f%15f%15s%n",time,speed,"SPLAT!" ) );
 				return false;
 			}
 			
