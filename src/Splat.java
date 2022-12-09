@@ -10,17 +10,6 @@ import java.util.*;
  * <p>
  * CS1131, 12/8/2022
  * The SplatProject project.
- * Earth | 9.8 m/s2 | 287 K | 101 kPa | 28 g (N2) | 1.2 kg/m3 | 54 m/s
- * Venus (1 bar level) | 8.9 m/s2 | 350 K | 101 kPa | 44 g (CO2) | 1.53 kg/m3 | 46 m/s
- * Venus (surface) | 8.9 m/s2 | 730 K | 9.3 MPa | *non-ideal gas | 67 kg/m3 | 6.9 m/s*
- * Mars | 3.7 m/s2 | 227 K | 600 Pa | 44 g (CO2) | 0.014 kg/m3 | 415 m/s
- * Jupiter (@ 1 bar) | 23.1 m/s2 | 152 K | 101 kPa | 2 g (H2) | 0.16 kg/m3 | 228 m/s
- * Saturn (@ 1 bar) | 10.4 m/s2 | 134 K | 101 kPa | 2 g (H2) | 0.18 kg/m3 | 144 m/s
- * Titan | 1.35 m/s2 | 94 K | 147 kPa | 28 g (N2) | 5.3 kg/m3 | 9.6 m/s
- * Uranus (@ 1 bar) | 8.7 m/s2 | 76 K | 101 kPa | 2 g (H2) | 0.32 kg/m3 | 99 m/s
- * Neptune (@ 1 bar) | 11.0 m/s2 | 73 K | 101 kPa | 2 g (H2) | 0.33 kg/m3 | 110 m/s
- * Triton | 0.78 m/s2 | 38 K | 1.4 Pa | 28 g (N2) | 0.12 g/m3 | 1,530 m/s*
- * Pluto | 0.62 m/s2 | 40 K | 1 Pa | 28 g (N2) | 0.08 g/m3 | 1,670 m/s*
  */
 public class Splat {
 	
