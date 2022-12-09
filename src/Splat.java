@@ -66,8 +66,7 @@ public class Splat {
 		do {
 			planet = randomizePlanet();
 			Score[] score = {new Score()};
-			System.out.printf( "%n" +
-					"You are skydiving on %s.%n" +
+			System.out.printf( "You are skydiving on %s%n"+
 					"Altitude = %f meters.%n" +
 					"Terminal Velocity = %f meters/second.%n" +
 					"Acceleration = %f meters/second/second.%n" +
