@@ -111,8 +111,8 @@ public class Splat {
 			System.out.printf( "%15d%15s%10s%15.2f%15.3f%15.3f%15.3f%n",i,score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height);
 			pw.println( String.format( "%s,%s,%f,%f,%f,%f",score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height));
 		}
-		
 		pw.close();
+		
 		scan.close();
 	}
 	
