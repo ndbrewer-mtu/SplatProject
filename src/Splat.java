@@ -10,17 +10,6 @@
 public class Splat {
 	
 	
-	/**
-	 * The main method is called auto-magically by Java to start the program.
-	 * <Description here>
-	 *
-	 * @param args Contains a list of command-line arguments.
-	 * @return Nothing.
-	 */
-	public static void main( String[] args ) {
-		// code goes here...
-		System.out.println( "Hello World!" );
-		
-	}
+
 	
 }
