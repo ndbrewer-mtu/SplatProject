@@ -13,13 +13,14 @@ import java.util.*;
  */
 public class Splat {
 	
-	String[] planetNames = {"Earth","Venus","Saturn","Jupiter","Neptune","Uranus","Pluto","Mercury","Mars"};
+	private static String[] planetNames = {"Earth","Venus","Saturn","Jupiter","Neptune","Uranus","Pluto","Mercury","Mars"};
 	
-	private Planet planet;
-	private String name;
-	private ArrayList<Score> Scoreboard = new ArrayList<>();
+	public Planet planet;
+	public String name;
+	public ArrayList<Score> Scoreboard = new ArrayList<>();
+	public static SplatFX fx = new SplatFX();
 	
-	private void readFile(){
+	public void readFile(){
 		try(Scanner scan = new Scanner( new File( "Scoreboard.txt" ) )) {
 		while ( scan.hasNextLine() ){
 			String[] line = scan.nextLine().split( "," );
@@ -36,7 +37,10 @@ public class Splat {
 		}
 	}
 	
-	private Planet randomizePlanet(){
+	/**
+	 * @return a planet
+	 */
+	public Planet randomizePlanet(){
 		return new Planet(
 				planetNames[ (int) (Math.abs( new Random().nextDouble() * planetNames.length) % planetNames.length-1) ],
 				Math.abs( new Random().nextDouble() * 500 ),
@@ -79,8 +83,7 @@ public class Splat {
 			alive = parachute( timer, score );
 			
 			if(alive){
-				Scoreboard.add( score[0] );
-				selectionsort( Scoreboard,0, Scoreboard.size(),SortOrder.ASCENDING );
+				updateScoreboard( score[0] );
 				for(int i = 1; i <= Scoreboard.size(); i++){
 					Score s = Scoreboard.get( i-1 );
 					if(s.equals( score[0] ))
@@ -93,14 +96,37 @@ public class Splat {
 			String inp = scan.next().toLowerCase();
 			if(inp.equals("y"))
 				again = true;
-			else if(inp.equals( "n" ))
+			else if(inp.contains( "n" ))
 				again=false;
-			
-			
 			
 		}while(again);
 		
 		System.out.printf( "Top Jumps:%n%15s%15s%10s%15s%15s%15s%15s%n","#","NAME","PLANET","INITIAL_HEIGHT","TIME","VELOCITY","FINAL_HEIGHT" );
+		
+		for(int i = 1 ; i <= Scoreboard.size(); i++){
+			Score score = Scoreboard.get( i-1 );
+			System.out.printf( "%15d%15s%10s%15.2f%15.3f%15.3f%15.3f%n",i,score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height);
+			fx.output.setText( String.format( "%15d%15s%10s%15.2f%15.3f%15.3f%15.3f%n",i,score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height ) );
+		}
+		
+		outputScoreboard();
+		
+		scan.close();
+	}
+	
+	/**
+	 * Updates the scoreboard arraylist.
+	 * @param score score to add to scoreboard.
+	 */
+	public void updateScoreboard(Score score){
+		Scoreboard.add( score );
+		selectionsort( Scoreboard,0, Scoreboard.size(),SortOrder.ASCENDING );
+	}
+	
+	/**
+	 * overwrites Scoreboard.txt file with data in Scoreboard.
+	 */
+	public void outputScoreboard(){
 		
 		PrintWriter pw = null;
 		try {
@@ -110,16 +136,18 @@ public class Splat {
 		}
 		for(int i = 1 ; i <= Scoreboard.size(); i++){
 			Score score = Scoreboard.get( i-1 );
-			System.out.printf( "%15d%15s%10s%15.2f%15.3f%15.3f%15.3f%n",i,score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height);
 			pw.println( String.format( "%s,%s,%f,%f,%f,%f",score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height));
 		}
 		pw.close();
-		
-		scan.close();
 	}
 	
-	//altitude - ( 0.5 * acceleration * timer ** 2 )
-	private boolean parachute( double timer, Score[] score) {
+	/**
+	 * Does the calculations for parachuting.
+	 * @param timer the time you open your parachute.
+	 * @param score the score you got if you lived.
+	 * @return if you survived your fall.
+	 */
+	public boolean parachute( double timer, Score[] score) {
 		double height = planet.Altitude;
 		double time = 0;
 		double speed = 0;
@@ -153,7 +181,7 @@ public class Splat {
 		new Splat().run();
 	}
 	
-	private class Planet {
+	public class Planet {
 		public Planet(  String planetName, double terminalVelocity, double acceleration, double altitude ) {
 			this.terminalVelocity = terminalVelocity;
 			Acceleration = acceleration;
@@ -173,7 +201,7 @@ public class Splat {
 		}
 	}
 	
-	private class Score implements Comparable {
+	public static class Score implements Comparable {
 		public String name;
 		public String planet;
 		public double Initial_Height;
@@ -200,32 +228,22 @@ public class Splat {
 			return this.Final_Height.compareTo( score.Final_Height );
 		}
 		
-		@Override
-		public boolean equals( Object o ) {
-			if ( this == o ) return true;
-			if ( o == null || getClass() != o.getClass() ) return false;
-			Score score = ( Score ) o;
-			return Double.compare( score.Initial_Height, Initial_Height ) == 0 && Double.compare( score.Time, Time ) == 0 && Double.compare( score.Velocity, Velocity ) == 0 && Double.compare( score.Final_Height, Final_Height ) == 0 && Objects.equals( name, score.name ) && Objects.equals( planet, score.planet );
-		}
-		
-		@Override
-		public int hashCode() {
-			return Objects.hash( name, planet, Initial_Height, Time, Velocity, Final_Height );
-		}
 	}
-	
+
 	/**
-	 * Order to sort in.
-	 * <br><code>Ascending = -1</code>
-	 * <br><code>Descending = 1</code>
-	 */
-	private enum SortOrder {
-		ASCENDING(-1),
-		DESCENDING(1);
+ 	* Order to sort in.
+ 	* <br><code>Ascending = -1</code>
+ 	* <br><code>Descending = 1</code>
+ 	*/
+	public enum SortOrder {
+		ASCENDING( -1 ),
+		DESCENDING( 1 );
 		public final int order;
-		SortOrder(int order){
+		
+		SortOrder( int order ) {
 			this.order = order;
 		}
+		
 	}
 	
 	/**
@@ -236,7 +254,7 @@ public class Splat {
 	 * @param sortOrder order to sort in. [ASCENDING, DESCENDING].
 	 * @param <E> Generic type that extends Comparable.
 	 */
-	private static <E extends Comparable<E>> void selectionsort ( List< E > list, int lowindex, int highindex, SortOrder sortOrder ) {
+	public static <E extends Comparable<E>> void selectionsort ( List< E > list, int lowindex, int highindex, SortOrder sortOrder ) {
 		if(list == null  || sortOrder == null || (highindex < lowindex)) throw new IllegalArgumentException();
 		
 		for (int currentIndex = lowindex; currentIndex < highindex - 1; currentIndex++)
