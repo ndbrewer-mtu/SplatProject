@@ -80,7 +80,7 @@ public class Splat {
 			
 			if(alive){
 				Scoreboard.add( score[0] );
-				quicksort( Scoreboard,0, Scoreboard.size() );
+				selectionsort( Scoreboard,0, Scoreboard.size(),SortOrder.ASCENDING );
 				for(int i = 1; i <= Scoreboard.size(); i++){
 					Score s = Scoreboard.get( i-1 );
 					if(s.equals( score[0] ))
@@ -111,8 +111,8 @@ public class Splat {
 			System.out.printf( "%15d%15s%10s%15.2f%15.3f%15.3f%15.3f%n",i,score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height);
 			pw.println( String.format( "%s,%s,%f,%f,%f,%f",score.name,score.planet,score.Initial_Height,score.Time,score.Velocity,score.Final_Height));
 		}
-		
 		pw.close();
+		
 		scan.close();
 	}
 	
@@ -213,39 +213,44 @@ public class Splat {
 	}
 	
 	/**
-	 * Sorts a List using Quick sort Algorithm standard.
-	 * @param list List of elements to sort.
-	 * @param lowindex index to start sorting from. list[lowindex...highindex]. (inclusive)
-	 * @param highindex index to stop sorting at. list[lowindex...highindex]. (exclusive)
-	 * @param <E> Generic type that extends Comparable.
+	 * Order to sort in.
+	 * <br><code>Ascending = -1</code>
+	 * <br><code>Descending = 1</code>
 	 */
-	private static <E extends Comparable<E>> void quicksort( List< E > list, int lowindex, int highindex){
-		if(list == null || (highindex < lowindex)) throw new IllegalArgumentException();
-		highindex-=1;
-		if(lowindex < highindex){
-			int pivotIndex = partition(list,lowindex,highindex);
-			
-			quicksort( list,lowindex,pivotIndex);
-			quicksort( list,pivotIndex+1,highindex );
+	private enum SortOrder {
+		ASCENDING(-1),
+		DESCENDING(1);
+		public final int order;
+		SortOrder(int order){
+			this.order = order;
 		}
 	}
 	
-	private static <E extends Comparable<E>> int partition(List< E > list, int lowindex, int highindex){
-		int pivotIndex = (lowindex + highindex) / 2;
-		E pivotValue = list.get( pivotIndex );
-		lowindex--;
-		highindex++;
+	/**
+	 * Sorts a List using Selection sort Algorithm standard.
+	 * @param list List of elements to sort.
+	 * @param lowindex index to start sorting from. list[lowindex...highindex]. (inclusive)
+	 * @param highindex index to stop sorting at. list[lowindex...highindex]. (exclusive)
+	 * @param sortOrder order to sort in. [ASCENDING, DESCENDING].
+	 * @param <E> Generic type that extends Comparable.
+	 */
+	private static <E extends Comparable<E>> void selectionsort ( List< E > list, int lowindex, int highindex, SortOrder sortOrder ) {
+		if(list == null  || sortOrder == null || (highindex < lowindex)) throw new IllegalArgumentException();
 		
-		while ( true ){
-			do lowindex++; while ( list.get( lowindex ).compareTo( pivotValue ) == -1);
-			do highindex--; while ( list.get( highindex ).compareTo( pivotValue ) == 1);
-			
-			if(lowindex >= highindex) return highindex;
-			
-			E temp = list.get( lowindex );
-			list.set( lowindex, list.get(highindex) );
-			list.set(highindex,temp);
+		for (int currentIndex = lowindex; currentIndex < highindex - 1; currentIndex++)
+		{
+			int minIndex = currentIndex;
+			for (int i = currentIndex + 1; i < highindex; i++)
+				if (list.get( i ).compareTo(list.get( minIndex )) == sortOrder.order)
+					minIndex = i;
+			if (minIndex != currentIndex)
+			{
+				E temp = list.get( currentIndex );
+				list.set( currentIndex,list.get( minIndex ) );
+				list.set( minIndex, temp );
+			}
 		}
-		
 	}
+	
+	
 }
