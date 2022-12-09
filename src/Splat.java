@@ -100,6 +100,8 @@ public class Splat {
 			
 		}while(again);
 		
+		System.out.printf( "Top Jumps:%n%15s%15s%10s%15s%15s%15s%15s%n","#","NAME","PLANET","INITIAL_HEIGHT","TIME","VELOCITY","FINAL_HEIGHT" );
+		
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter( "Scoreboard.txt" );
